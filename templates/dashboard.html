@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSV File Upload and Preview</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div id="overlay"></div>
+    <div id="preloader">
+        <img src="/static/logo.svg" alt="Loading...">
+    </div>
+    <div class="container">
+        <header>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="logo"><a href="/"><img src="/static/logo.svg" alt=""></a></div>
+                </div>
+                <div class="col-md-1">
+                    <nav class="center-head">
+                        <ul>
+                            <li><button id="toggle-sidebar">Toggle Menu</button></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-md-5">
+                    <div class="actions">
+                        <h4>Actions</h4>
+                        <select id="file-select">
+                            <option value="">Select a file</option>
+                            {% for file in files %}
+                            <option value="{{ file }}" {% if file == last_uploaded_file %}selected{% endif %}>{{ file }}</option>
+                            {% endfor %}
+                        </select>
+                        <button id="load-insights" class="btn-primary">Load Insights</button> <!-- New button added -->
+                    </div>  
+                </div>
+                <div class="col-md-4">
+                    <nav class="right-head">
+                        <ul>
+                            <li><a href="#">Notification</a></li>
+                            <li><a href="#">Settings</a></li>
+   
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="row">
+                <div class="col-md-2 sidebar">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/dashboard">Dashboard</a></li> <!-- New link added -->
+                    </ul>
+                    <hr>
+                    <ul>
+                        <li><a href="/">Help</a></li>
+                    </ul>
+                    <p class="copyrights">© 2025 Iceberg. All rights reserved.</p>
+                </div>
+                <div class="col-md-10">
+                    <h2>Clear, engaging and interactive</h2>
+                    <div id="file-insights">
+                        <div class="insights-cards" id="insights-cards">
+                            <!-- Insights cards will be populated by AJAX -->
+                        </div>
+                    </div>
+                 
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Preview (limit 5,0)</h4>
+                            <div class="card">
+                                <div class="responsive-table">
+                                    <table id="csv-preview">
+                                        <thead>
+                                            <tr id="csv-preview-header">
+                                                <!-- Header will be populated by AJAX -->
+                                            </tr>
+                                        </thead>
+                                        <tbody id="csv-preview-body">
+                                            <!-- Body will be populated by AJAX -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+           
+        </footer>
+    </div>
+    <script src="static/jquery-3.6.0.min.js"></script>
+    <script src="/static/script.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#load-insights').on('click', function() {
+                var selectedFile = $('#file-select').val();
+                if (selectedFile) {
+                    $('#overlay').show(); // Show overlay
+                    $('#preloader').show(); // Show preloader
+                    $.ajax({
+                        url: '/file-insights',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ filename: selectedFile }),
+                        success: function(data) {
+                            $('#overlay').hide(); // Hide overlay
+                            $('#preloader').hide(); // Hide preloader
+                            displayCSVPreview(data.columns, data.rows);
+                            displayFileInsights(data.insights);
+                        },
+                        error: function() {
+                            $('#overlay').hide(); // Hide overlay on error
+                            $('#preloader').hide(); // Hide preloader on error
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
