@@ -135,7 +135,10 @@ ul {
     font-style: normal;
     font-variation-settings: "SOFT" 0, "WONK" 0;
 }
-
+table#csv-preview {
+    width: 100%;
+    text-align: left;
+}
 .card {
     background: linear-gradient(90deg, #202020, #333333);
     border-radius: 1rem;
@@ -495,9 +498,11 @@ input[type="file"] {}
     flex-wrap: wrap;
     margin-top: calc(-1* var(--bs-gutter-y));
     margin-right: calc(-.5* var(--bs-gutter-x));
-    margin-left: calc(-.5* var(--bs-gutter-x));align-items: center;
+    margin-left: calc(-.5* var(--bs-gutter-x));align-items: start;
 }
-
+header .row {
+ align-items: center;
+}
 .col {
     flex: 1 0 0%;
 }
