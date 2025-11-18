@@ -24,6 +24,6 @@ A Flask web app that lets you upload CSV files, view them in a dashboard, and ge
 
 ### 1. Clone the repo
 ```bash
-git clone https://github.com/your-username/csv-insights-dashboard.git
+git clone [https://github.com/your-username/csv-insights-dashboard](https://github.com/TamerDotWork/iceberg).git
 cd csv-insights-dashboard
 ```
